@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chase.play.dao.UeMapper">
+
+    <insert id="add" parameterType="com.chase.play.model.Ue">
+        INSERT
+        INTO
+        ue(UID, EID)
+        VALUES
+        (#{uid}, #{eid})
+    </insert>
+
+    <delete id="deleteByUid" parameterType="int">
+        DELETE
+        FROM
+        ue
+        WHERE
+        uid = #{uid}
+    </delete>
+
+    <delete id="deleteByEid" parameterType="int">
+        DELETE
+        FROM
+        ue
+        WHERE
+        eid = #{eid}
+    </delete>
+
+    <delete id="delete" parameterType="int">
+        DELETE
+        FROM
+        ue
+        WHERE
+        uid = #{uid}
+        AND
+        eid = #{eid}
+    </delete>
+
+    <select id="getAttendUser" resultMap="getUserFromDatabaseMap">
+        SELECT
+        `user`.uid, `user`.password,`user`.username,`user`.join_num,`user`.create_num,
+        `user`.state, `user`.email, `user`.avatar, sid
+        FROM
+        ue, `user`
+        WHERE
+        ue.uid = `user`.uid
+        AND
+        eid = #{eid}
+    </select>
+
+    <resultMap id="getUserFromDatabaseMap" type="com.chase.play.model.User">
+        <id column="uid" property="uid"/>
+        <result column="username" property="userName"/>
+        <result column="password" property="pwd"/>
+        <result column="join_num" property="joinNum"/>
+        <result column="create_num" property="createNum"/>
+        <result column="state" property="state"/>
+        <result column="email" property="email"/>
+        <result column="avatar" property="avatar"/>
+        <result column="sid" property="sid"/>
+    </resultMap>
+
+</mapper>

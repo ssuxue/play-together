@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  app:
+    restart: always
+    build: ./
+    hostname: docker-spring-boot
+    container_name: docker-spring-boot
+    image: docker-spring-boot/latest
+    #    端口不对外开放
+    #    ports:
+    #      - 8080:8080
+    volumes:
+      - ./volumes/app:/app
+  nginx:
+    depends_on:
+      - app
+    container_name: docker-nginx
+    hostname: docker-nginx
+    image:
+    environment:
+      TZ: Asia/Shanghai
+    restart: always
+    expose:
+      - 80
+    ports:
+      - 80:80
+    links:
+      - app
+    volumes:
+      - ./volumes/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./volumes/nginx/conf.d:/etc/nginx/conf.d
+      - ./volumes/nginx/logs:/var/log/nginx

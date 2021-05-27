@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chase.play.dao.EvaluationMapper">
+
+    <insert id="insert">
+        INSERT
+        INTO
+        extension_evaluation(eid, evaluation, evalNum)
+        VALUES
+        (#{eid}, 5, 1)
+    </insert>
+
+    <select id="select" resultType="com.chase.play.model.ExtensionEvaluation">
+        SELECT
+        *
+        FROM
+        extension_evaluation
+        WHERE
+        eid = #{eid}
+    </select>
+
+    <select id="selectScore" resultType="java.math.BigDecimal">
+        SELECT
+        evaluation
+        FROM
+        extension_evaluation
+        WHERE
+        eid = #{eid}
+    </select>
+
+    <update id="update" parameterType="com.chase.play.model.ExtensionEvaluation">
+        UPDATE
+        extension_evaluation
+        SET
+        evaluation = #{evaluation},
+        evalNum = (evalNum + 1)
+        WHERE
+        eid = #{eid}
+    </update>
+
+    <delete id="delete">
+        DELETE
+        FROM
+        extension_evaluation
+        WHERE
+        eid = #{eid}
+    </delete>
+
+</mapper>

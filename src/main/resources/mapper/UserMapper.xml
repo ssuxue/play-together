@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chase.play.dao.UserMapper">
+
+    <select id="getLoginParam"  resultType="com.chase.play.model.User">
+        SELECT
+        `user`.uid,
+        `user`.`password`,
+        `user`.`username`,
+        `user`.join_num,
+        `user`.create_num,
+        `user`.state,
+        `user`.email,
+        `user`.avatar,
+        `user`.sid
+        FROM
+        `user`
+        WHERE
+        `user`.email = #{email}
+    </select>
+
+    <select id="selectAll"  resultMap="getUserFromDatabaseMap">
+        SELECT * FROM `user`
+    </select>
+
+    <insert id="add" parameterType="com.chase.play.model.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT
+        INTO
+        `user`(password, username, join_num, create_num, state, email, avatar, sid)
+        VALUES
+        (#{pwd}, #{userName}, #{joinNum}, #{createNum}, #{state}, #{email}, #{avatar}, #{sid})
+    </insert>
+
+    <select id="select" resultMap="getUserFromDatabaseMap">
+        SELECT * FROM `user` WHERE email = #{email}
+    </select>
+
+    <select id="selectBySid" resultMap="getUserFromDatabaseMap">
+        SELECT * FROM `user` WHERE sid = #{sid}
+    </select>
+    <select id="selectByUid" resultType="com.chase.play.model.User">
+        SELECT * FROM `user` WHERE uid = #{uid}
+    </select>
+
+    <resultMap id="getUserFromDatabaseMap" type="com.chase.play.model.User">
+        <id column="uid" property="uid"/>
+        <result column="username" property="userName"/>
+        <result column="password" property="pwd"/>
+        <result column="join_num" property="joinNum"/>
+        <result column="create_num" property="createNum"/>
+        <result column="state" property="state"/>
+        <result column="email" property="email"/>
+        <result column="avatar" property="avatar"/>
+        <result column="sid" property="sid"/>
+    </resultMap>
+
+    <update id="modify" parameterType="com.chase.play.model.User">
+        UPDATE `user`
+        <trim prefix="set" suffixOverrides=",">
+            <if test="pwd!=null">password=#{pwd},</if>
+            <if test="userName!=null">username=#{userName},</if>
+            <if test="joinNum!=null">join_num=#{joinNum},</if>
+            <if test="createNum!=null">create_num=#{createNum},</if>
+            <if test="state!=null">state=#{state},</if>
+            <if test="avatar!=null">avatar=#{avatar},</if>
+            <if test="sid!=null">sid=#{sid},</if>
+        </trim>
+        WHERE email=#{email}
+    </update>
+
+    <insert id="addUserCredit">
+        INSERT
+        INTO
+        user_credit
+        VALUES
+        (#{uid}, 3, 1)
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chase.play.dao.UserCreditMapper">
+
+    <select id="select" resultType="com.chase.play.model.UserCredit">
+        SELECT
+        *
+        FROM
+        user_credit
+        WHERE
+        uid = #{uid}
+    </select>
+
+    <update id="update" parameterType="com.chase.play.model.UserCredit">
+        UPDATE
+        user_credit
+        SET
+        credit = #{credit},
+        evalNum = (evalNum + 1)
+        WHERE
+        uid = #{uid}
+    </update>
+
+</mapper>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chase.play.dao.ExtensionMapper">
+
+    <insert id="add" parameterType="com.chase.play.model.Extension" useGeneratedKeys="true" keyProperty="id">
+        INSERT
+        INTO
+        extension(EType, Ename, UID, Jnum, location, startTime, state)
+        VALUES
+        (#{type}, #{name}, #{uid}, 1, #{location}, #{startTime}, 1)
+    </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM
+        extension
+        WHERE
+        eid = #{eid}
+    </delete>
+
+    <select id="select" resultMap="getDataFromDataBaseMap">
+        SELECT
+        *
+        FROM
+        extension
+        WHERE
+        eid = #{id}
+    </select>
+
+    <select id="selectAll" resultMap="getDataFromDataBaseMap">
+        SELECT
+        *
+        FROM
+        extension
+        WHERE
+        state = 1
+        ORDER
+        BY
+        startTime
+        DESC
+    </select>
+
+    <resultMap id="getDataFromDataBaseMap" type="com.chase.play.model.Extension">
+        <id column="EID" property="id"/>
+        <result column="Etype" property="type"/>
+        <result column="Ename" property="name"/>
+        <result column="UID" property="uid"/>
+        <result column="Jnum" property="number"/>
+        <result column="location" property="location"/>
+        <result column="startTime" property="startTime"/>
+        <result column="state" property="state"/>
+    </resultMap>
+
+    <select id="selectByTag" resultMap="getDataFromDataBaseMap">
+        SELECT
+        *
+        FROM
+        extension
+        WHERE
+        Etype = #{type}
+        AND
+        state = 1
+        ORDER
+        BY
+        startTime
+        DESC
+    </select>
+
+    <select id="getByState" resultMap="getDataFromDataBaseMap">
+        SELECT
+        *
+        FROM
+        extension
+        WHERE
+        state = #{state}
+        ORDER
+        BY
+        startTime
+        DESC
+    </select>
+
+    <select id="getRunningByUid" resultMap="getDataFromDataBaseMap">
+        SELECT
+        *
+        FROM
+        extension,
+        ue
+        WHERE
+        ue.eid = extension.eid
+        AND
+        ue.uid = #{uid}
+        AND
+        state = 1
+        ORDER
+        BY
+        startTime
+        DESC
+    </select>
+
+    <select id="getByUid" resultMap="getDataFromDataBaseMap">
+        SELECT
+        *
+        FROM
+        extension
+        WHERE
+        uid = #{uid}
+        ORDER
+        BY
+        startTime
+        DESC
+    </select>
+
+    <select id="getJoinExtensionByUid" resultMap="getDataFromDataBaseMap">
+        SELECT
+        *
+        FROM
+        extension,
+        ue
+        WHERE
+        ue.eid = extension.eid
+        AND
+        ue.uid = #{uid}
+        ORDER
+        BY
+        startTime
+        DESC
+    </select>
+
+    <select id="getOverByUid" resultMap="getDataFromDataBaseMap">
+        SELECT
+        *
+        FROM
+        extension,
+        ue
+        WHERE
+        ue.eid = extension.eid
+        AND
+        ue.uid = #{uid}
+        AND
+        state = 0
+        ORDER
+        BY
+        startTime
+        DESC
+    </select>
+
+    <update id="overExtension" parameterType="int">
+        UPDATE
+        extension
+        SET
+        state = 0
+        WHERE
+        eid = #{id}
+    </update>
+
+    <update id="updateMemberNumber" parameterType="int">
+        UPDATE
+        extension
+        SET
+        Jnum = (Jnum + 1)
+        WHERE
+        eid = #{id}
+    </update>
+
+    <update id="creaseMemberNumber" parameterType="int">
+        UPDATE
+        extension
+        SET
+        Jnum = (Jnum - 1)
+        WHERE
+        eid = #{id}
+    </update>
+
+    <resultMap id="getExtensionTimeMap" type="com.chase.play.dto.ExtensionDTO">
+        <id column="EID" property="id"/>
+        <result column="startTime" property="time"/>
+    </resultMap>
+
+    <select id="getTimeAndId" resultMap="getExtensionTimeMap">
+        SELECT
+        eid, startTime
+        FROM
+        extension
+        WHERE
+        state = 1
+    </select>
+
+    <update id="setJoinNumToOne">
+        UPDATE
+        extension
+        SET
+        Jnum = 1
+        WHERE
+        eid = #{id}
+    </update>
+
+</mapper>

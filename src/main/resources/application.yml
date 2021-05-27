@@ -1,0 +1,64 @@
+server:
+  port: 8080
+spring:
+  servlet:
+    multipart:
+      enabled: true #开启文件上传
+      max-file-size: 10MB # 限制文件上传大小为10M
+  datasource:
+    url: jdbc:mysql://188.131.156.21:3306/playtogether?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: wangqing
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mail: # 网易系(126/163/yeah)邮箱配置
+    host: smtp.163.com # 发送邮件服务器
+    username: playtogether12368@163.com # 发送邮件的邮箱地址
+    password: DSEYJEVAJSNMMNOE # 客户端授权码，不是邮箱密码,网易的是自己设置的
+    properties.mail.smtp.port: 994 # 465或者994
+    from: playtogether12368@163.com # 发送邮件的地址，和上面username一致
+    properties.mail.smtp.starttls.enable: true
+    properties.mail.smtp.starttls.required: true
+    properties.mail.smtp.ssl.enable: true
+    default-encoding: utf-8
+  redis:
+    host: 188.131.156.21 # Redis服务器地址
+    database: 0 # Redis数据库索引（默认为0）
+    port: 6379 # Redis服务器连接端口
+    password: suxue # Redis服务器连接密码（默认为空）
+    lettuce:
+      pool:
+        max-active: 8 # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1ms # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 8 # 连接池中的最大空闲连接
+        min-idle: 0 # 连接池中的最小空闲连接
+    timeout: 3000ms # 连接超时时间（毫秒）
+  rabbitmq:
+    host: localhost # rabbitmq的连接地址
+    port: 5672 # rabbitmq的连接端口号
+    virtual-host: /play # rabbitmq的虚拟host
+    username: play # rabbitmq的用户名
+    password: play # rabbitmq的密码
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true # 将属性中的下划线转换为驼峰格式
+
+minio:
+  endpoint: http://47.116.137.69:9000
+  bucketName: playtogether
+  accessKey: AKIAIOSFODNN7EXAMPLE
+  secretKey: wJalrXUtnSUXUE/K7MDENG/bPxRfiCYEXAMPLEKEY
+
+redis:
+  key:
+    prefix:
+      captcha: "portal:captcha:"
+    expire:
+      captcha: 120 # 验证码超期时间
+
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: myAurora #JWT加解密使用的密钥
+  expiration: 604800 #JWT的超期限时间(60*60*24)
+  tokenHead: Bearer  #JWT负载中拿到开头
